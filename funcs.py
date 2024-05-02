@@ -288,7 +288,8 @@ def blackbodyabsorption(wavelength, spectra_data, temp):
 def convert_fluxunits_to_photoncounts(wavelength, flux, emission_coefficient, area, solid_angle, xlimits = None, ylimits = None):
     """
     Function converts the units from flux values erg /(cm2 Hz s sr) to photon counts (photons/sec) and plots a graph. 
-    
+    Note to user: Use only if flux values are not normalised! 
+
     Parameters: 
         - wavelength            : loads in the wavelengths (um)
         - flux                  : input flux value to be converted into photon counts. Must be in erg /(cm2 Hz s sr)!
@@ -304,18 +305,18 @@ def convert_fluxunits_to_photoncounts(wavelength, flux, emission_coefficient, ar
     sr = solid_angle 
     c = const.c.value
     h = const.h.value
-    unitless_flux = flux 
+    unitless_flux = np.array(flux)
     frequency = c/(wavelength*(10**(-6))) #calculates the frequency by first converting the wavelength to metres from um
     energy = h*c*frequency
-    new_flux = unitless_flux*10**(-7) #such that erg /(cm2 Hz s sr) --> J /(cm2 Hz s sr)
+    new_flux = unitless_flux*(10**(-7)) #such that erg /(cm2 Hz s sr) --> J /(cm2 Hz s sr)
     
-    photoncount_persec = (tc*new_flux*A*sr*frequency)/energy # output units in sphotons per sec 
+    photoncount_persec = (tc*new_flux*A*sr*frequency)/energy # output units in photons per sec 
 
     if xlimits is not None or ylimits is not None: 
       # Plot with custom limits
         figure(figsize=(15, 4))
         plt.plot(wavelength, photoncount_persec)
-        plt.title('Converting to photon counts (photons per sec)')
+        plt.title('Light in photon counts (photons per sec)')
         plt.xlim(xlimits)
         plt.ylim(ylimits)
         plt.xlabel('Wavelength (um)')
@@ -325,7 +326,7 @@ def convert_fluxunits_to_photoncounts(wavelength, flux, emission_coefficient, ar
         # Plot without custom limits
         figure(figsize=(15, 4))
         plt.plot(wavelength, photoncount_persec)
-        plt.title('Converting to photon counts (photons per sec)')
+        plt.title('Light in photon counts (photons per sec)')
         plt.xlabel('Wavelength (um)')
         plt.ylabel('Photons / sec')
         plt.show()
