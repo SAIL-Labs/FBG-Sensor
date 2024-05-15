@@ -2,12 +2,12 @@
 
 # This python script contains the functions used to simulate the straining of a Fibre Bragg Grating. 
   
-# This script goes hand in hand with scratch_SimulatingCode_FBG.ipynb and newSimulatingCode_FBG.ipynb and 
+# This script goes with scratch_SimulatingCode_FBG.ipynb and newSimulatingCode_FBG.ipynb and 
 # those files cannot be used without this script
 
 
-# Written by: Samhita S Sodhi
-
+# Written by: Samhita S Sodhi (15/05/24)
+  
 
 ################################################ import
 
@@ -427,12 +427,8 @@ def correlation(strainvalues, wavelengths, spectra_data, initial_transmittedvals
         plt.ylabel('Light Reflected as a fraction of the total light')
         plt.show()  
         
-        figure(figsize=(15, 4))
-        plt.plot(strain, totallightvals)
-        plt.title('Total light')
-        plt.xlabel('Strain')
-        plt.ylabel('Total Light')
-        plt.show()
+        totallight = np.mean(np.array(transmittedvals) + np.array(reflectedvals))
+        print('Total light (erg / cm2 Hz s sr):', str(np.round(totallight, 1)))
 
     elif normalisation == 'False':
         figure(figsize=(15, 4))
@@ -449,12 +445,8 @@ def correlation(strainvalues, wavelengths, spectra_data, initial_transmittedvals
         plt.ylabel('Light Reflected (erg / cm2 Hz s sr)')
         plt.show()  
         
-        figure(figsize=(15, 4))
-        plt.plot(strain, totallightvals)
-        plt.title('Total light')
-        plt.xlabel('Strain')
-        plt.ylabel('Total Light (erg / cm2 Hz s sr)')
-        plt.show()
+        totallight = np.mean(np.array(transmittedvals) + np.array(reflectedvals))
+        print('Total light (erg / cm2 Hz s sr):', str(totallight))
 
     return transmittedvals, reflectedvals
 
