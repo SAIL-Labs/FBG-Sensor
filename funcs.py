@@ -1,13 +1,21 @@
+
 # Funcs.py
+# Written by: Samhita S Sodhi (16/05/24)
 
 # This python script contains the functions used to simulate the straining of a Fibre Bragg Grating. 
-  
-# This script goes with scratch_SimulatingCode_FBG.ipynb and newSimulatingCode_FBG.ipynb and 
-# those files cannot be used without this script
 
+# The functions include: 
+#     - input_spectra: loads in the data, 
+#     - plot_spectra: plots a simple line plot of data, 
+#     - fit_curves: fits a gaussian or lorentzian model to the datapoints, 
+#     - blackbodyabsorption: imprints a theoretical blackbody spectrum to data, 
+#     - apply_strain: simulates the stretching of fbg, 
+#     - plot_strainspectra: plots the output of simulate strain as a visualisation,
+#     - correlation: for several values of strain plots the amount of light transmitted/reflected,
+#     - convert_fluxunits_to_photoncounts: converts default flux units (erg / cm2 Hz s sr) to (photons/sec)
 
-# Written by: Samhita S Sodhi (15/05/24)
-  
+# This script goes with scratch_SimulatingCode_FBG.ipynb and newSimulatingCode_FBG.ipynb.
+ 
 
 ################################################ import
 
@@ -21,31 +29,33 @@ from astropy.modeling.models import BlackBody
 from scipy.signal import find_peaks
 from scipy.interpolate import interp1d
 
-################################################
+################################################ loading data
  
 def input_spectra(filepath, wavelengthcol, datacol, separation, isheader = None, wavelengthunits = "um", dataunits = "fractional"):
     """
-    This function loads in the datafile for the spectral information and assigns values to the wavelength and spectral data.
+    This function loads in the datafile for the spectral information and stores them in variables.
     
     Parameters include:
-        - filepath                  : requires the path of the datafile contained in "", the file must contain at least one column 
-                                      for wavelength given in nanometers (nm) or micrometres (um) and one column for spectral line 
-                                      intensity in decibels or fractional values.  
-        - wavelengthcol             : user inputs which column consists of the wavelength values.
-        - datacol                   : user inputs which column consists of the spectra data values.
-        - separation                : parameter takes in what the separation between the variables within the file
-                                      e.g. "\t" means values separated by a tab.
-        - isheader                  : parameter takes in whether there is a header in the file. Default is None - no header present.
-        - wavelengthunits           : function uses data either micrometres "um" or nanometres "nm", default assumes wavelength is 
-                                      in "um" else user must input the units, i.e., "nm".
-        - dataunits                 : function uses data either as a fractional value or dB, default assumes units of spectral data 
-                                      is fractional else user must input the units, "dB".
+        - filepath          : requires the path of the datafile contained in "", the file must contain at least one column 
+                              for wavelength given in nanometers (nm) or micrometres (um) and one column for spectral line 
+                              intensity in decibels (dB) or fractional values.  
+        - wavelengthcol     : user inputs which column consists of the wavelength values.
+        - datacol           : user inputs which column consists of the spectra data values.
+        - separation        : parameter takes in what the separation between the variables within the file
+                              e.g. "\t" means values separated by a tab.
+        - isheader          : parameter takes in whether there is a header in the file. Default is None - no header present.
+        - wavelengthunits   : function uses data either micrometres "um" or nanometres "nm", default assumes wavelength is 
+                              in "um" else user must input the units, i.e., "nm".
+        - dataunits         : function uses data either as a fractional value or dB, default assumes units of spectral data 
+                              is fractional else user must input the units, "dB".
+
+    Note: Nicholas' SAIL labs spectral data was in decibels but the NASA PSG website had spectral information as a fractional value
     """
 
     # ~~~~~ Inputs the data file
-    gas_raw_data = pd.read_csv(filepath, header = isheader, sep = separation).values #stores the file into a variable 
-    gas_wavelength = (gas_raw_data[:,wavelengthcol]).astype(float) #variable stores the wavelength range
-    gas_line_data = (gas_raw_data[:,datacol]).astype(float) #variable stores the absorption line data for each line 
+    gas_raw_data = pd.read_csv(filepath, header = isheader, sep = separation).values 
+    gas_wavelength = (gas_raw_data[:,wavelengthcol]).astype(float) 
+    gas_line_data = (gas_raw_data[:,datacol]).astype(float) 
         
     if wavelengthunits == "um":
         gas_wavelength = gas_wavelength #leaves the wavelength units in micrometres (um)
@@ -55,7 +65,7 @@ def input_spectra(filepath, wavelengthcol, datacol, separation, isheader = None,
         print("Please input the wavelength as um or nm")  
 
     if dataunits == "fractional": 
-        gas_line_data = gas_line_data #leaves the data in terms of percentage
+        gas_line_data = gas_line_data #leaves the data in terms of fractions
     elif dataunits == "dB":
         gas_line_data = (10**(gas_line_data/10))  #converts from decibels to a fractional value between 0 and 1
     else: 
@@ -110,22 +120,26 @@ def fit_curves(spectra_wav, spectra_data, detection_height, model = 'lorentzian'
     or a Gaussian - for each peak of the input gas data whilst converting it back to the default spectrum appearance. 
     
     The parameters include: 
-      - spectra_wav     : loads in the wavelengths 
-      - spectra_data    : loads in the spectral data  
-      - detection_height: input a value for the height of a spectral line to classify as a peak i.e., a value of 0.01 means 
-                          any spectral line smaller than this value will not be classified as a peak. Please note: overfitting 
-                          or underfitting may occur if the value inputted is too large or too small
-      - model           : choose to either fit a 'gaussian' or a 'lorentzian' curve to the data, default is a lorentzian model
-      - plot            : user has a choice to visualise the peak detection computation and fitted spectral data, default is No plot but input of 'Y' gives plots
-      - xlimits         : user has a choice to input a range of x values (wavelength) i.e.,  [ , ] for the plot else default is complete range of values
-      - ylimits         : user has a choice to input a range of y values (Transmitted Intensity) i.e.,  [ , ] for the plot else default is complete range of values
+      - spectra_wav      : loads in the wavelengths 
+      - spectra_data     : loads in the spectral data  
+      - detection_height : input a value for the height of a spectral line to classify as a peak - can be useful for noisy data 
+                           i.e., a value of 0.01 means any spectral line smaller than this value will not be classified as a peak. 
+                           Please note: overfitting or underfitting may occur if the value inputted is too large or too small. 
+      - model            : choose to either fit a 'gaussian' or a 'lorentzian' curve to the data, default is a lorentzian model
+      - plot             : user has a choice to visualise the peak detection computation and fitted spectral data, default is no plot 'N' 
+                           plot but input 'Y' gives plots
+      - xlimits          : user has a choice to input a range of x values (wavelength) i.e.,  [ , ] for the plot else default is complete 
+                           range of values
+      - ylimits          : user has a choice to input a range of y values (Transmitted Intensity) i.e.,  [ , ] for the plot else default 
+                           is complete range of values
    """
     
     # ~~~~~~~~ DETECTING PEAKS ~~~~~~~~
     x_values = np.array(spectra_wav)
     y_values = np.array(1.0 - spectra_data) # flipping the graph so peak detection can occur
 
-    peaks, properties = find_peaks(y_values, height= detection_height, width = 0) #properties include, peak heights, peak widths, etc. 
+    peaks, properties = find_peaks(y_values, height = detection_height, width = 0) 
+    # find_peaks properties include, peak heights, peak widths, etc. 
 
     if plot == 'Y':
         # PLOTS THE SPECTRA AS WELL AS THE DETECTED PEAKS SO USER CAN VISUALISE THE COMPUTATION
@@ -150,7 +164,9 @@ def fit_curves(spectra_wav, spectra_data, detection_height, model = 'lorentzian'
             plt.title('Visualise detected peaks')
             plt.show()
 
-    # ~~~~~~~~ FITS GAUSSIAN OR LORENTZIAN MODELS TO THE DATA AND PLOTS THEM ~~~~~~~~
+
+    ## ~~~~~~~~~~~~~~~~~~~~~~~ FITS GAUSSIAN OR LORENTZIAN MODELS TO THE DATA AND PLOTS THEM ~~~~~~~~~~~~~~~~~~~~~~~ ##
+
     # ~~~~~~~~ GAUSSIAN MODEL ~~~~~~~~
     if model == 'gaussian': 
         def gaussian(x, sigma, mu, amp):
@@ -203,6 +219,7 @@ def fit_curves(spectra_wav, spectra_data, detection_height, model = 'lorentzian'
                 plt.title('Fitting a Gaussian to the spectrum')
                 plt.legend(['Gaussian fitted spectrum'])
                 plt.show()
+
 
     # ~~~~~~~~ LORENTZIAN MODEL ~~~~~~~~
     elif model == 'lorentzian':
@@ -265,11 +282,11 @@ def fit_curves(spectra_wav, spectra_data, detection_height, model = 'lorentzian'
 
 def blackbodyabsorption(wavelength, spectra_data, temp): 
    """
-   Function imprints a theoretical blackbody radiation curve at the chosen temperature with the absorption of the provided gas. 
+   Function imprints a theoretical blackbody radiation curve at the chosen temperature, to the absorption of the provided gas. 
 
    The parameters include:   
-      - wavelength     : loads in the wavelengths
-      - spectra_data   : loads in the spectral data
+      - wavelength     : loads in the wavelengths in micrometres (um)
+      - spectra_data   : loads in the spectral data in fractional values (between 0 and 1)
       - temp           : temperature of the blackbody in Kelvin
    """
 
@@ -286,8 +303,8 @@ def blackbodyabsorption(wavelength, spectra_data, temp):
 
 def apply_strain(strain, wavelengths, transmittedvals, temp_change, thermal_exp_coeff, thermo_optic_coeff, strain_optic_coeff):
     """
-    This function takes an input of a strain value and properties of the fibre bragg grating from which it 
-    simulates the straining of the fibre bragg grating. 
+    This function takes an input of a strain value and properties of the fibre bragg grating from which it simulates the 
+    straining of the fibre bragg grating. 
 
     Parameters include:   
     - strain              : input a single strain value to stretch the fibre bragg grating given in micro-strain values i.e., XXe-6
@@ -311,8 +328,9 @@ def apply_strain(strain, wavelengths, transmittedvals, temp_change, thermal_exp_
     fillvalue = max(transmittedvals[0]).value #chooses the max value rather than the boundary values because max_values are typically the boundary values
 
     wav_shift = (1 - pe)*strain + (alpha + nu)*t_shift
-    fibre_wavelength_new = wavelengths[0] + wav_shift*wavelengths[0] #creates new wavelengths for which there is no existing data 
-    f1 = interp1d(fibre_wavelength_new, transmittedvals[1], bounds_error = False, fill_value = fillvalue) #bounds_error = False -> interp1d sets the out-of-range values with the fill_value, which is nan by default / here fitted to the max value
+    fibre_wavelength_new = wavelengths[0] + wav_shift*wavelengths[0] #creates new wavelengths after straining has occurred 
+    f1 = interp1d(fibre_wavelength_new, transmittedvals[1], bounds_error = False, fill_value = fillvalue) 
+    #bounds_error = False -> interp1d sets the out-of-range values with the fill_value, which is nan by default / here fitted to the max value
     interpolatedvals = f1(wavelengths[1])
 
     return fibre_wavelength_new, interpolatedvals
@@ -323,7 +341,8 @@ def apply_strain(strain, wavelengths, transmittedvals, temp_change, thermal_exp_
 def plot_strainspectra(wavelengths, transmittedvals, xlimits = None, ylimits = None):
     """
     This function plots the spectra once the strain has been applied to the fibre bragg grating. 
-    
+    It plots the Original Gas Spectra, Original FBG Spectra and Strained FBG Spectra on the same figure. 
+
     Parameters include: 
       - wavelengths     : requires the input of the original gas spectra wavelength, fibre bragg grating wavelength and the new strained wavelengths 
                           calculated from the apply_strain function as a list i.e., [spectra_wav, fibre_wavelength, fibre_wavelength_new]
@@ -365,31 +384,31 @@ def plot_strainspectra(wavelengths, transmittedvals, xlimits = None, ylimits = N
 
 ################################################ amount of transmitted light per strain value
 
-def correlation(strainvalues, wavelengths, spectra_data, initial_transmittedvals, normalisation = 'True'):
+def correlation(strainvalues, wavelengths, spectra_data, initial_spectraldata, normalisation = 'True'):
     """
     For different input values of strain this function plots the amount of total, transmitted and reflected light once incident light
     passes through the fibre bragg grating.
 
     Parameters include: 
-    - strainvalues            : user inputs values of strain i.e., strain = np.linspace(0, 0.0014, 500) for which the stretching of the fibre bragg 
-                                grating is simulated
-    - wavelengths             : requires the input of the original gas spectra wavelength and fibre bragg grating wavelength as a list 
-                                i.e., [gas_spectra_wavelength, fibre_wavelength]
-    - spectra_data            : requires the input of the transmitted_intensity calculated by the blackbodyabsorption function as a list
-                                i.e., [transmitted_intensity, transmitted_intensityFBG]
-    - initial_transmittedvals : requires input of the original gas spectra data
-    - normalisation           : user can choose whether to normalise the calculations to see the outputs as a fraction rather than true values else 
-                                default is 'True'. 
+    - strainvalues          : user inputs values of strain i.e., strain = np.linspace(0, 0.0014, 500) for which the stretching of the fibre bragg 
+                              grating is simulated
+    - wavelengths           : requires the input of the original gas spectra wavelength and fibre bragg grating wavelength as a list 
+                              i.e., [gas_spectra_wavelength, fibre_wavelength]
+    - spectra_data          : requires the input of the transmitted_intensity calculated by the blackbodyabsorption function as a list
+                              i.e., [transmitted_intensity, transmitted_intensityFBG]
+    - initial_spectraldata  : requires input of the original gas spectra data in fractional values
+    - normalisation         : user can choose whether to normalise the calculations to see the outputs as a fraction rather than true values else 
+                              default is 'True'. 
     """
 
     reflectedvals = []
     transmittedvals = []
     totallightvals = []
     strain = strainvalues
-    fillvalue = max(initial_transmittedvals[0]).value  
+    fillvalue = max(initial_spectraldata[0]).value  
 
     for i in strain:
-        fibre_wavelength_new, interpolatedvals = apply_strain(i, wavelengths, initial_transmittedvals, 0, 0.55e-6, 8.6e-6, 0.22) # values for silica, no temperature change
+        fibre_wavelength_new, interpolatedvals = apply_strain(i, wavelengths, initial_spectraldata, 0, 0.55e-6, 8.6e-6, 0.22) # values for silica, no temperature change (these values shouldn't be hardcoded !!)
         totallight = fillvalue*np.ones(len(interpolatedvals*spectra_data)) # calculates the total amount of light going through the system
         reflected = (totallight - interpolatedvals*spectra_data).sum() # reflected light = total - transmitted
         transmitted = np.array(interpolatedvals*spectra_data).sum() # transmitted light
@@ -397,8 +416,8 @@ def correlation(strainvalues, wavelengths, spectra_data, initial_transmittedvals
         sumtotal_light = totallight.sum()
 
         if normalisation == 'True':
-            normalise_transmitted = transmitted / sumtotal_light #normalises transmitted light
-            normalise_reflected = reflected / sumtotal_light #normalises reflected light
+            normalise_transmitted = transmitted / sumtotal_light    #normalises transmitted light
+            normalise_reflected = reflected / sumtotal_light        #normalises reflected light
             
             transmittedvals.append(normalise_transmitted)
             reflectedvals.append(normalise_reflected)
@@ -456,7 +475,6 @@ def correlation(strainvalues, wavelengths, spectra_data, initial_transmittedvals
 def convert_fluxunits_to_photoncounts(wavelength, flux, emission_coefficient, area, solid_angle, xlimits = None, ylimits = None):
     """
     Function converts the units from flux values erg /(cm2 Hz s sr) to photon counts (photons/sec) and plots a graph. 
-    Note to user: Use only if flux values are not normalised! 
 
     Parameters: 
         - wavelength            : loads in the wavelengths (um)
@@ -465,8 +483,10 @@ def convert_fluxunits_to_photoncounts(wavelength, flux, emission_coefficient, ar
         - area                  : area of the fibre cross-section (cm^2)
         - solid_angle           : solid angle (steradians) that reaches the fibre core of a particular 
                                   diameter
-        - xlimits               : user has a choice to input a range of x values (wavelength) i.e.,  [ , ] for the plot else default is complete range of values 
-        - ylimits               : user has a choice to input a range of y values (Transmitted Intensity) i.e.,  [ , ] for the plot else default is complete range of values
+        - xlimits               : user has a choice to input a range of x values (wavelength) i.e.,  [ , ] for the plot else default is 
+                                  complete range of values 
+        - ylimits               : user has a choice to input a range of y values (Transmitted Intensity) i.e.,  [ , ] for the plot else 
+                                  default is complete range of values
     """
     tc = emission_coefficient
     A = area 
