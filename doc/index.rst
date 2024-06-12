@@ -9,9 +9,6 @@ Welcome to fbg_sensor's documentation!
 ======================================
 
 Hello and welcome! 
-Testing updating homepage
-Update to the homepage without building
-updating the homepage with building
 
 .. toctree::
    :maxdepth: 1
