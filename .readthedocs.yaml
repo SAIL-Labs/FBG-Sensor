@@ -13,18 +13,18 @@ build:
     # nodejs: "20"
     # rust: "1.70"
     # golang: "1.20"
-  jobs:
-  pre_build:
-    - pip install myst-parser
-    - pip install sphinx-rtd-theme
+  # jobs:
+  # pre_build:
+  #   - pip install myst-parser
+  #   - pip install sphinx-rtd-theme
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
   configuration: docs/source/conf.py
   # You can configure Sphinx to use a different builder, for instance use the dirhtml builder for simpler URLs
-  builder: "html"
+  # builder: "html"
   # Fail on all warnings to avoid broken references
-  # fail_on_warning: true
+  fail_on_warning: true
 
 # Optionally build your docs in additional formats such as PDF and ePub
 # formats:
@@ -39,6 +39,6 @@ python:
     - requirements: docs/requirements.txt
     - method: pip
       path: .
-      extra_requirements:
-        - docs
+      # extra_requirements:
+      #   - docs
     
