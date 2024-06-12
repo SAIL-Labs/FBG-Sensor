@@ -13,7 +13,7 @@ Hello and welcome!
 .. toctree::
    :maxdepth: 1
 
-   docs/data_process
+   data_process
 
 
 
