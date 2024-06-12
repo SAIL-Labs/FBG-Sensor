@@ -17,10 +17,6 @@ test t
 
    data_process
 
-.. automodule:: data_process
-    :members:
-    :undoc-members:
-
 Indices and tables
 ==================
 
