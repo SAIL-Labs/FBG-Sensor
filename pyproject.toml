@@ -8,4 +8,4 @@ authors = [{name = "Alison", email = "a.wong@sydney.edu.au"}]
 dynamic = ["description", "version"]
 
 [tool.flit.module]
-name = "sphinx_examples"
+name = "FBG-examples"
