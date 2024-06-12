@@ -49,6 +49,20 @@
 <li class="toctree-l1"><a class="reference internal" href="data_process.html">Data processing functions</a></li>
 </ul>
 </div>
+<span class="target" id="module-data_process"></span><dl class="py function">
+<dt class="sig sig-object py" id="data_process.psg_to_numpy">
+<span class="sig-prename descclassname"><span class="pre">data_process.</span></span><span class="sig-name descname"><span class="pre">psg_to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_process.psg_to_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes a psg_trn.txt file generated from the NASA-GSF Planetary Spectru Gemerator (PSG, Villanueva et al. 2018, 2022, <a class="reference external" href="https://psg.gsfc.nasa.gov/">https://psg.gsfc.nasa.gov/</a>) and converts the data into a numpy array. The first column is the wave/freq, the second column is the total and the following columns correspond to each gas species.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><strong>filepath: string</strong></dt><dd><p>Path to the psg file.</p>
+</dd>
+<dt><strong>verbose: boolean, (default=True)</strong></dt><dd><p>If True, displays the metadata information in the file.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
 </section>
 <section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
