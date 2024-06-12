@@ -8,7 +8,8 @@
 Welcome to fbg_sensor's documentation!
 ======================================
 
-Hello and welcome!
+Hello and welcome! 
+Testing updating homepage
 
 .. toctree::
    :maxdepth: 1
