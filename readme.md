@@ -7,5 +7,6 @@ Note that if you have updated the site it typically takes a few minutes for the 
 To build the site locally use:
 
 ```
-sphinx-build -M html doc site
+sphinx-build -M html source build
+make html
 ```
