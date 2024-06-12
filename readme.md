@@ -2,11 +2,12 @@
 
 See [here](https://sail-labs.github.io/FBG-Sensor/index.html#home) for documentation on the FBG sensor code.
 
-Note that if you have updated the site it typically takes a few minutes for the changes to come through.
-
-To build the site locally use:
+To update site navigate to the docs folder and then run the following before pushing to GitHub:
 
 ```
-sphinx-build -M html source build
-make html
+./buildpage.sh
 ```
+
+It may take a minute or so for the updates to come through and you may need to refresh the page.
+
+If you want to view changes locally, just open `index.html`.
