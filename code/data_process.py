@@ -29,7 +29,7 @@ def psg_to_numpy(filepath, verbose=True):
             skip += 1
 
     data = pd.read_csv(filepath, sep=' ', skiprows=skip, header=None).to_numpy()
-
+    print("hi")
     return data
 
 
