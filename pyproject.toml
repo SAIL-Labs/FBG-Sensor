@@ -1,3 +1,11 @@
 [build-system]
 requires = ["flit_core >=3.5,<4"]
 build-backend = "flit_core.buildapi"
+
+[project]
+name = "fbg"
+authors = [{name = "Alison", email = "a.wong@sydney.edu.au"}]
+dynamic = ["description", "version"]
+
+[tool.flit.module]
+name = "sphinx_examples"
