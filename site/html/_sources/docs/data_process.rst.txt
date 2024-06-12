@@ -1,11 +1,8 @@
-.. _data_process:
-
-Data process
+Data processing functions
 -------------------
 
-Functions for processing data
 
-.. automodule:: data_process
+.. automodule:: data_process  
     :members:
     :undoc-members:
 
