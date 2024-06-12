@@ -10,7 +10,7 @@ Welcome to fbg_sensor's documentation!
 
 Hello and welcome! 
 
-test t
+test tx
 
 .. toctree::
    :maxdepth: 1
