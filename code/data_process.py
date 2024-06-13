@@ -5,13 +5,17 @@ from scipy.signal import find_peaks
 def psg_to_numpy(filepath, verbose=True):
 
     """
-    Takes a psg_trn.txt file generated from the NASA-GSF Planetary Spectrum Gemerator (PSG, Villanueva et al. 2018, 2022, https://psg.gsfc.nasa.gov/) and converts the data into a numpy array. The first column is the wavelength, the second column is the total fractional transmittence and the following columns correspond to each gas species.
+    Takes a psg_trn.txt file generated from the NASA-GSF Planetary Spectrum Gemerator (PSG, Villanueva et al. 2018, 2022, https://psg.gsfc.nasa.gov/) and converts the data into a numpy array. The first column is the wavelength, the second column is the total fractional transmittence and the following columns correspond to each gas species. 
     
+
         **filepath: string**
             Path to the psg file.
 
         **verbose: boolean, (default=True)**
             If True, displays the metadata information in the file.
+
+        .. seealso::
+            :ref:`Using NASA PSG <psg_walkthrough>`
 
     """
     with open(filepath, "r") as f:

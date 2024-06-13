@@ -15,6 +15,8 @@ Hello and welcome!
    :maxdepth: 1
 
    data_process
+   psg
+
    demos/generate_spectrum.ipynb
 
 

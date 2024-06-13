@@ -12,7 +12,12 @@
 #
 import os
 import sys
+# import jinja2
 sys.path.insert(0, os.path.abspath('../../code/'))
+# !{sys.executable} -m pip install jinja2==3.0.3
+# print(jinja2.__version__)
+# from markupsafe import escape
+# from jinja2 import escape
 
 # -- Project information -----------------------------------------------------
 
