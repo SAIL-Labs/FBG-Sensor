@@ -1,19 +1,16 @@
-
 <!DOCTYPE html>
 
-<html lang="English">
+<html lang="English" data-content_root="./">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Data processing functions &#8212; fbg_sensor 1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5238d716" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css?v=0f882399" />
+    <script src="_static/documentation_options.js?v=08429154"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Welcome to fbg_sensor&#39;s documentation!" href="index.html" /> 
@@ -41,12 +38,78 @@
           <div class="body" role="main">
             
   <section id="data-processing-functions">
-<span id="data-process"></span><h1>Data processing functions<a class="headerlink" href="#data-processing-functions" title="Permalink to this heading">¶</a></h1>
+<span id="data-process"></span><h1>Data processing functions<a class="headerlink" href="#data-processing-functions" title="Link to this heading">¶</a></h1>
 <p>These are functions for basic data processing</p>
-<span class="target" id="module-data_process"></span><dl class="py function">
+<dl class="py function" id="module-data_process">
+<dt class="sig sig-object py" id="data_process.gaussian">
+<span class="sig-prename descclassname"><span class="pre">data_process.</span></span><span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_process.gaussian" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a Gaussian function on the given domain at mu with standard deviation sigma and relative amplitude amp.</p>
+<dl class="simple">
+<dt><strong>x: 1D numpy array</strong></dt><dd><p>Domain of the function.</p>
+</dd>
+<dt><strong>sigma: float</strong></dt><dd><p>Standard deviation of the function.</p>
+</dd>
+<dt><strong>mu: float</strong></dt><dd><p>Mean of the function.</p>
+</dd>
+<dt><strong>amp: float</strong></dt><dd><p>Relative height of the function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_process.generate_spectrum">
+<span class="sig-prename descclassname"><span class="pre">data_process.</span></span><span class="sig-name descname"><span class="pre">generate_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Gaussian'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_process.generate_spectrum" title="Link to this definition">¶</a></dt>
+<dd><p>Models a transimittence spectrum based on the given peaks.</p>
+<dl class="simple">
+<dt><strong>data: ND numpy array</strong></dt><dd><p>This should match the format of the output of <a class="reference internal" href="#data_process.psg_to_numpy" title="data_process.psg_to_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">psg_to_numpy()</span></code></a>.</p>
+</dd>
+<dt><strong>peaks: 1D numpy array</strong></dt><dd><p>This should match the format of the output of <a class="reference internal" href="#data_process.locate_peaks" title="data_process.locate_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">locate_peaks()</span></code></a>.</p>
+</dd>
+<dt><strong>n: integer</strong></dt><dd><p>The number of samples along the spectrum.</p>
+</dd>
+<dt><strong>sigma: float (default=1e-5)</strong></dt><dd><p>Width of each peak.</p>
+</dd>
+<dt><strong>type: string (default='Gaussian')</strong></dt><dd><p>The type of function used to model each peak. Options are 'Gaussian' or 'Lorentzian'.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_process.locate_peaks">
+<span class="sig-prename descclassname"><span class="pre">data_process.</span></span><span class="sig-name descname"><span class="pre">locate_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frac_transmittence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_process.locate_peaks" title="Link to this definition">¶</a></dt>
+<dd><p>Takes an array of fractional transmittence and returns the index of the downard peaks. Each downward peak is lower than the threshold value.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><strong>frac_transmittence: 1D numpy array</strong></dt><dd><p>Stores the fractional transmittence corresponding to a given wavelength. These values should be between 0 and 1.</p>
+</dd>
+<dt><strong>threshold: float, (default=0.99)</strong></dt><dd><p>A downward peak will only register if it dips below the specified threshold.</p>
+</dd>
+<dt><strong>return: 1D numpy array</strong></dt><dd><p>Containing the index of the indentified peaks.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_process.lorentzian">
+<span class="sig-prename descclassname"><span class="pre">data_process.</span></span><span class="sig-name descname"><span class="pre">lorentzian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_process.lorentzian" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a Lorentzian function on the given domain at mu with standard deviation sigma and relative amplitude amp.</p>
+<dl class="simple">
+<dt><strong>x: 1D numpy array</strong></dt><dd><p>Domain of the function.</p>
+</dd>
+<dt><strong>sigma: float</strong></dt><dd><p>Standard deviation of the function.</p>
+</dd>
+<dt><strong>mu: float</strong></dt><dd><p>Mean of the function.</p>
+</dd>
+<dt><strong>amp: float</strong></dt><dd><p>Relative height of the function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="data_process.psg_to_numpy">
-<span class="sig-prename descclassname"><span class="pre">data_process.</span></span><span class="sig-name descname"><span class="pre">psg_to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_process.psg_to_numpy" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function takes a psg_trn.txt file generated from the NASA-GSF Planetary Spectru Gemerator (PSG, Villanueva et al. 2018, 2022, <a class="reference external" href="https://psg.gsfc.nasa.gov/">https://psg.gsfc.nasa.gov/</a>) and converts the data into a numpy array. The first column is the wave/freq, the second column is the total and the following columns correspond to each gas species.</p>
+<span class="sig-prename descclassname"><span class="pre">data_process.</span></span><span class="sig-name descname"><span class="pre">psg_to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_process.psg_to_numpy" title="Link to this definition">¶</a></dt>
+<dd><p>Takes a psg_trn.txt file generated from the NASA-GSF Planetary Spectrum Gemerator (PSG, Villanueva et al. 2018, 2022, <a class="reference external" href="https://psg.gsfc.nasa.gov/">https://psg.gsfc.nasa.gov/</a>) and converts the data into a numpy array. The first column is the wavelength, the second column is the total fractional transmittence and the following columns correspond to each gas species.</p>
 <blockquote>
 <div><dl class="simple">
 <dt><strong>filepath: string</strong></dt><dd><p>Path to the psg file.</p>
@@ -68,6 +131,20 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Data processing functions</a><ul>
+<li><a class="reference internal" href="#data_process.gaussian"><code class="docutils literal notranslate"><span class="pre">gaussian()</span></code></a></li>
+<li><a class="reference internal" href="#data_process.generate_spectrum"><code class="docutils literal notranslate"><span class="pre">generate_spectrum()</span></code></a></li>
+<li><a class="reference internal" href="#data_process.locate_peaks"><code class="docutils literal notranslate"><span class="pre">locate_peaks()</span></code></a></li>
+<li><a class="reference internal" href="#data_process.lorentzian"><code class="docutils literal notranslate"><span class="pre">lorentzian()</span></code></a></li>
+<li><a class="reference internal" href="#data_process.psg_to_numpy"><code class="docutils literal notranslate"><span class="pre">psg_to_numpy()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="index.html"
                           title="previous chapter">Welcome to fbg_sensor's documentation!</a></p>
@@ -79,7 +156,7 @@
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -87,7 +164,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -110,8 +187,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2024, Alison Wong, Qingshan Yu, Samhita Sodhi, Nicholas Morley.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    &#169; Copyright 2024, Alison Wong, Qingshan Yu, Samhita Sodhi, Nicholas Morley.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>
