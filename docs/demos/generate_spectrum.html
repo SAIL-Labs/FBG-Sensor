@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Demo: Generating a transmission spectrum &#8212; fbg_sensor 1 documentation</title>
+    <title>Modelling an FBG by generating a transmission spectrum &#8212; fbg_sensor 1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5238d716" />
     <link rel="stylesheet" type="text/css" href="../_static/nature.css?v=0f882399" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
@@ -17,6 +17,7 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data processing functions" href="../data_process.html" />
     <link rel="prev" title="Walkthrough NASA&#39;s Planetary Spectrum Generator" href="../psg.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -29,10 +30,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../data_process.html" title="Data processing functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="../psg.html" title="Walkthrough NASA&#39;s Planetary Spectrum Generator"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">fbg_sensor 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Demo: Generating a transmission spectrum</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Modelling an FBG by generating a transmission spectrum</a></li> 
       </ul>
     </div>  
 
@@ -41,15 +45,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="Demo:-Generating-a-transmission-spectrum">
-<h1>Demo: Generating a transmission spectrum<a class="headerlink" href="#Demo:-Generating-a-transmission-spectrum" title="Link to this heading">¶</a></h1>
+  <section id="Modelling-an-FBG-by-generating-a-transmission-spectrum">
+<h1>Modelling an FBG by generating a transmission spectrum<a class="headerlink" href="#Modelling-an-FBG-by-generating-a-transmission-spectrum" title="Link to this heading">¶</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">markupsafe</span> <span class="kn">import</span> <span class="n">escape</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -58,23 +61,124 @@
 </pre></div>
 </div>
 </div>
-<p>First you need to download a spectrum and convert it to a numpy array.</p>
+<p>First you need to download a spectrum from NASA’s PSG and convert it to a numpy array.</p>
+<p>See walkthrough here: <a class="reference external" href="https://sail-labs.github.io/FBG-Sensor/psg.html">https://sail-labs.github.io/FBG-Sensor/psg.html</a></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;spectra_files/psg_trn.txt&#39;</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">psg_to_numpy</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fractional transmittence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Transmission Spectrum for CH4&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/demos_generate_spectrum_4_0.png" src="../_images/demos_generate_spectrum_4_0.png" />
+</div>
+</div>
+<p>For this little demo, we’re going to work with a subset of this data to make the visualisations clearer.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subset</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">9000</span><span class="p">:</span><span class="mi">9500</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subset</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">subset</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fractional transmittence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Transmission Spectrum for CH4&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/demos_generate_spectrum_6_0.png" src="../_images/demos_generate_spectrum_6_0.png" />
+</div>
+</div>
+<section id="Locating-peaks">
+<h2>Locating peaks<a class="headerlink" href="#Locating-peaks" title="Link to this heading">¶</a></h2>
+<p>Next, we’ll locate the downard peaks by specifying a threshold. Peaks will only register if the drop below the specify threshold.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">peaks</span> <span class="o">=</span> <span class="n">locate_peaks</span><span class="p">(</span><span class="n">subset</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subset</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">subset</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">subset</span><span class="p">[</span><span class="n">peaks</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">subset</span><span class="p">[</span><span class="n">peaks</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">subset</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">subset</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;threshold&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fractional transmittence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Transmission Spectrum for CH4&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/demos_generate_spectrum_8_0.png" src="../_images/demos_generate_spectrum_8_0.png" />
+</div>
+</div>
+</section>
+<section id="Modelling-the-spectrum">
+<h2>Modelling the spectrum<a class="headerlink" href="#Modelling-the-spectrum" title="Link to this heading">¶</a></h2>
+<p>We can choose to either model the peaks with Gaussian or Lorentzian functions.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code> controls the number of samples you take so you are not limited by the sampling of the original dataset</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sigma</span></code> controls the widths of the peaks</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wavelength_gauss</span><span class="p">,</span> <span class="n">trans_gauss</span> <span class="o">=</span> <span class="n">generate_spectrum</span><span class="p">(</span><span class="n">subset</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Gaussian&#39;</span><span class="p">)</span>
+<span class="n">wavelength_lortz</span><span class="p">,</span> <span class="n">trans_lortz</span> <span class="o">=</span> <span class="n">generate_spectrum</span><span class="p">(</span><span class="n">subset</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Lorentzian&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subset</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">subset</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original transmission spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">subset</span><span class="p">[</span><span class="n">peaks</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">subset</span><span class="p">[</span><span class="n">peaks</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wavelength_gauss</span><span class="p">,</span> <span class="n">trans_gauss</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Gaussian model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wavelength_gauss</span><span class="p">,</span> <span class="n">trans_gauss</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Lorentzian model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fractional transmittence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Transmission Spectrum for CH4&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/demos_generate_spectrum_10_0.png" src="../_images/demos_generate_spectrum_10_0.png" />
+</div>
+</div>
+</section>
 </section>
 
 
@@ -85,9 +189,25 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Modelling an FBG by generating a transmission spectrum</a><ul>
+<li><a class="reference internal" href="#Locating-peaks">Locating peaks</a></li>
+<li><a class="reference internal" href="#Modelling-the-spectrum">Modelling the spectrum</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="../psg.html"
                           title="previous chapter">Walkthrough NASA's Planetary Spectrum Generator</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../data_process.html"
+                          title="next chapter">Data processing functions</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -120,10 +240,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../data_process.html" title="Data processing functions"
+             >next</a> |</li>
+        <li class="right" >
           <a href="../psg.html" title="Walkthrough NASA&#39;s Planetary Spectrum Generator"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">fbg_sensor 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Demo: Generating a transmission spectrum</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Modelling an FBG by generating a transmission spectrum</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

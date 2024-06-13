@@ -5,23 +5,29 @@
 
 .. _home:
 
-Welcome to fbg_sensor's documentation!
-======================================
+Welcome to the code site for the gas sensor project
+===================================================
 
-Hello and welcome! 
-
+Walkthroughs and demos
+------------------
 
 .. toctree::
    :maxdepth: 1
 
-   data_process
    psg
-
    demos/generate_spectrum.ipynb
+
+Code Documentation
+------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   data_process
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

@@ -6,9 +6,7 @@ cp -r ../code/demos source/
 sphinx-build -M html source .
 make html
 
-rm -r _sources
-rm -r _static
-rm -r _images
+./refresh.sh
 
 mv html/* .
 
