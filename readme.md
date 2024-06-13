@@ -11,3 +11,9 @@ To update site navigate to the docs folder and then run the following before pus
 It may take a minute or so for the updates to come through and you may need to refresh the page.
 
 If you want to view changes locally, just open `index.html`.
+
+To delete all the documentation files in your workspace you can use:
+
+```
+./refresh.sh
+```

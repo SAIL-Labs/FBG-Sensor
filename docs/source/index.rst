@@ -9,7 +9,7 @@ Welcome to the code site for the gas sensor project
 ===================================================
 
 Walkthroughs and demos
-------------------
+----------------------
 
 .. toctree::
    :maxdepth: 1
@@ -23,7 +23,7 @@ Code Documentation
 .. toctree::
    :maxdepth: 2
 
-   data_process
+   fbg
 
 
 Indices and tables
