@@ -15,6 +15,7 @@ Hello and welcome!
    :maxdepth: 1
 
    data_process
+   demos/generate_spectrum.ipynb
 
 
 Indices and tables

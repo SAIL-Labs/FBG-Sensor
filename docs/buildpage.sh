@@ -1,5 +1,8 @@
 #!/bin/bash
 
+rm -r demos
+cp -r ../code/demos source/
+
 sphinx-build -M html source .
 make html
 
