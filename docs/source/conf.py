@@ -21,12 +21,12 @@ sys.path.insert(0, os.path.abspath('../../code/'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'fbg_sensor'
+project = 'Gas SEnsor Project'
 copyright = '2024, Alison Wong, Qingshan Yu, Samhita Sodhi, Nicholas Morley'
 author = 'Alison Wong, Qingshan Yu, Samhita Sodhi, Nicholas Morley'
 
 # The full version, including alpha/beta/rc tags
-release = '1'
+release = 'v1'
 
 
 # -- General configuration ---------------------------------------------------
