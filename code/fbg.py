@@ -36,7 +36,7 @@ def psg_to_numpy(filepath, verbose=True):
     return data
 
 
-def locate_peaks(frac_transmittence, threshold=0.99):
+def locate_peaks(frac_transmittence, threshold=0.99, distance=100):
     """
     Takes an array of fractional transmittence and returns the index of the downard peaks. Each downward peak is lower than the threshold value.
 
@@ -45,12 +45,15 @@ def locate_peaks(frac_transmittence, threshold=0.99):
 
         **threshold: float, (default=0.99)**
             A downward peak will only register if it dips below the specified threshold.
+
+        **distance: int, (default=100)**
+            Maximum window measured by index in which only one peak can occur.
         
         **return: 1D numpy array**
             Containing the index of the indentified peaks.
     """
 
-    peaks, properties = find_peaks(-frac_transmittence, height=-threshold)
+    peaks, properties = find_peaks(-frac_transmittence, height=-threshold, distance=distance)
 
     return peaks
 
@@ -84,6 +87,12 @@ def lorentzian(x, sigma, mu, amp):
     """
     return (amp/np.pi) * (sigma/((x-mu)**2 + sigma**2))
 
+def apply_strain(data, strain):
+    
+    data[:, 0] *= (1+7e-7 * strain)
+    
+    return data
+
 def generate_spectrum(data, peaks, n=None, sigma=1e-5, type='Gaussian'):
     """
     Models a transimittence spectrum based on the given peaks.
@@ -110,7 +119,7 @@ def generate_spectrum(data, peaks, n=None, sigma=1e-5, type='Gaussian'):
         n = len(data)
 
     wavelengths = np.linspace(data[:, 0].min(), data[:, 0].max(), n)
-    transmittence = np.ones(n)
+    transmittence = np.zeros(n)
 
     if type == 'Gaussian':
         for i in range(len(peaks)):
