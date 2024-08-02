@@ -87,13 +87,13 @@ def lorentzian(x, sigma, mu, amp):
     """
     return (amp/np.pi) * (sigma/((x-mu)**2 + sigma**2))
 
-def apply_strain(data, strain):
+# def apply_strain(data, peaks, strain):
     
-    data[:, 0] *= (1+7e-7 * strain)
+#     new_locs = data[peaks, 0] * (1+7e-7 * strain)
     
-    return data
+#     return new_locs
 
-def generate_spectrum(data, peaks, n=None, sigma=1e-5, type='Gaussian'):
+def generate_spectrum(data, peaks, strain, n=None, sigma=1e-5, type='Gaussian'):
     """
     Models a transimittence spectrum based on the given peaks.
 
@@ -112,7 +112,7 @@ def generate_spectrum(data, peaks, n=None, sigma=1e-5, type='Gaussian'):
     **type: string (default='Gaussian')**
         The type of function used to model each peak. Options are 'Gaussian' or 'Lorentzian'.
     """
-    locs = data[peaks, 0]
+    locs = data[peaks, 0]* (1+7e-7 * strain)
     heights = 1 - data[peaks, 1]
 
     if n is None:
