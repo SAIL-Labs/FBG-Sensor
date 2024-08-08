@@ -108,7 +108,8 @@ def generate_spectrum(data, peaks, strain, n=None, sigma=1e-5, type='Gaussian'):
         The type of function used to model each peak. Options are 'Gaussian' or 'Lorentzian'.
     """
     locs = data[peaks, 0]* (1+7e-7 * strain)
-    heights = 1 - data[peaks, 1]
+    heights = 0.7 * np.ones(len(peaks))
+    # 1 - data[peaks, 1] 
 
     if n is None:
         n = len(data)
