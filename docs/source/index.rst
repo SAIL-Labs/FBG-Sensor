@@ -16,7 +16,7 @@ Walkthroughs and demos
 
    psg
    demos/generate_spectrum.ipynb
-   demos/demo1.ipynb
+   demos/cross_correlation.ipynb
 
 Code Documentation
 ------------------
