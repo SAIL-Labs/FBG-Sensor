@@ -2,8 +2,6 @@ import pandas as pd
 import numpy as np
 from scipy.signal import find_peaks
 
-# test test test
-
 def psg_to_numpy(filepath, verbose=True):
 
     """
@@ -87,12 +85,6 @@ def lorentzian(x, sigma, mu, amp):
     """
     return (amp/np.pi) * (sigma/((x-mu)**2 + sigma**2))
 
-# def apply_strain(data, peaks, strain):
-    
-#     new_locs = data[peaks, 0] * (1+7e-7 * strain)
-    
-#     return new_locs
-
 def generate_spectrum(data, peaks, strain, n=None, sigma=1e-5, type='Gaussian'):
     """
     Models a transimittence spectrum based on the given peaks.
@@ -102,6 +94,9 @@ def generate_spectrum(data, peaks, strain, n=None, sigma=1e-5, type='Gaussian'):
 
     **peaks: 1D numpy array**
         This should match the format of the output of :func:`locate_peaks`.
+
+    **strain: float**
+        This is the strain applied to the fiber given in micro-strain. Generally ranging -500 to 500.
 
     **n: integer**
         The number of samples along the spectrum.
