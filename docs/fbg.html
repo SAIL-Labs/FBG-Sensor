@@ -14,7 +14,7 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Alair’s test" href="demos/demo1.html" /> 
+    <link rel="prev" title="Applying strain to FBG and calculate cross-correlation" href="demos/cross_correlation.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -26,7 +26,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="demos/demo1.html" title="Alair’s test"
+          <a href="demos/cross_correlation.html" title="Applying strain to FBG and calculate cross-correlation"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Gas SEnsor Project v1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">FBG functions</a></li> 
@@ -59,12 +59,14 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fbg.generate_spectrum">
-<span class="sig-prename descclassname"><span class="pre">fbg.</span></span><span class="sig-name descname"><span class="pre">generate_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Gaussian'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbg.generate_spectrum" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fbg.</span></span><span class="sig-name descname"><span class="pre">generate_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Gaussian'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbg.generate_spectrum" title="Link to this definition">¶</a></dt>
 <dd><p>Models a transimittence spectrum based on the given peaks.</p>
 <dl class="simple">
 <dt><strong>data: ND numpy array</strong></dt><dd><p>This should match the format of the output of <a class="reference internal" href="#fbg.psg_to_numpy" title="fbg.psg_to_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">psg_to_numpy()</span></code></a>.</p>
 </dd>
 <dt><strong>peaks: 1D numpy array</strong></dt><dd><p>This should match the format of the output of <a class="reference internal" href="#fbg.locate_peaks" title="fbg.locate_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">locate_peaks()</span></code></a>.</p>
+</dd>
+<dt><strong>strain: float</strong></dt><dd><p>This is the strain applied to the fiber given in micro-strain. Generally ranging -500 to 500.</p>
 </dd>
 <dt><strong>n: integer</strong></dt><dd><p>The number of samples along the spectrum.</p>
 </dd>
@@ -77,13 +79,15 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fbg.locate_peaks">
-<span class="sig-prename descclassname"><span class="pre">fbg.</span></span><span class="sig-name descname"><span class="pre">locate_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frac_transmittence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbg.locate_peaks" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fbg.</span></span><span class="sig-name descname"><span class="pre">locate_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frac_transmittence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fbg.locate_peaks" title="Link to this definition">¶</a></dt>
 <dd><p>Takes an array of fractional transmittence and returns the index of the downard peaks. Each downward peak is lower than the threshold value.</p>
 <blockquote>
 <div><dl class="simple">
 <dt><strong>frac_transmittence: 1D numpy array</strong></dt><dd><p>Stores the fractional transmittence corresponding to a given wavelength. These values should be between 0 and 1.</p>
 </dd>
 <dt><strong>threshold: float, (default=0.99)</strong></dt><dd><p>A downward peak will only register if it dips below the specified threshold.</p>
+</dd>
+<dt><strong>distance: int, (default=100)</strong></dt><dd><p>Maximum window measured by index in which only one peak can occur.</p>
 </dd>
 <dt><strong>return: 1D numpy array</strong></dt><dd><p>Containing the index of the indentified peaks.</p>
 </dd>
@@ -151,8 +155,8 @@
   </div>
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="demos/demo1.html"
-                          title="previous chapter">Alair’s test</a></p>
+    <p class="topless"><a href="demos/cross_correlation.html"
+                          title="previous chapter">Applying strain to FBG and calculate cross-correlation</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -185,7 +189,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="demos/demo1.html" title="Alair’s test"
+          <a href="demos/cross_correlation.html" title="Applying strain to FBG and calculate cross-correlation"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Gas SEnsor Project v1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">FBG functions</a></li> 
