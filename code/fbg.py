@@ -53,7 +53,7 @@ def locate_peaks(frac_transmittence, threshold=0.99, distance=100):
 
     peaks, properties = find_peaks(-frac_transmittence, height=-threshold, distance=distance)
 
-    return peaks
+    return peaks, properties
 
 def gaussian(x, sigma, mu, amp):
     """
@@ -108,8 +108,8 @@ def generate_spectrum(data, peaks, strain, n=None, sigma=1e-5, type='Gaussian'):
         The type of function used to model each peak. Options are 'Gaussian' or 'Lorentzian'.
     """
     locs = data[peaks, 0]* (1+7e-7 * strain)
-    heights = 0.7 * np.ones(len(peaks))
-    # 1 - data[peaks, 1] 
+    heights = 1 - data[peaks, 1] 
+    # 0.7 * np.ones(len(peaks))  
 
     if n is None:
         n = len(data)
