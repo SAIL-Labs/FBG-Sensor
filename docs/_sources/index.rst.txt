@@ -27,6 +27,14 @@ Code Documentation
    fbg
 
 
+Data files
+------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   data
+
 Indices and tables
 ------------------
 
